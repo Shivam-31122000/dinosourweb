@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesozoic Environment - Dinosaur Era Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 12px 25px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .era-section {
+            margin: 50px 0;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .era-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .era-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .era-image {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+        }
+
+        .era-image:hover {
+            transform: scale(1.02);
+        }
+
+        .era-description {
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .environment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .environment-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .environment-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .environment-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .environment-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+
+        .video-section {
+            margin: 50px 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .video-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .custom-video {
+            width: 100%;
+            height: 450px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            border: none;
+            background: #000;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .video-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .video-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .continent-map {
+            text-align: center;
+            margin: 50px 0;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .continent-map h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+
+        .continent-map img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .map-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #ff9999;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .era-content {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .era-title {
+                font-size: 2rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .custom-video {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .custom-video {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Mesozoic Environment</h1>
+            <p class="subtitle">Explore the world as it was during the Age of Dinosaurs - a time of dramatic climate
+                changes, shifting continents, and diverse ecosystems.</p>
+            <a href="deepseek_html_2_with_sound_add.html" class="back-btn">← Back to Dinosaurs</a>
+        </header>
+
+        <!-- Triassic Period Section -->
+        <div class="era-section">
+            <h2 class="era-title">Triassic Period (252-201 million years ago)</h2>
+            <div class="era-content">
+                <div>
+                    <img src="https://i.ibb.co/wrrRyB3K/triassic-period.jpg" alt="Triassic Landscape" class="era-image">
+                </div>
+                <div class="era-description">
+                    <p>The Triassic period marked the beginning of the Mesozoic Era. The climate was generally hot and
+                        dry, with vast deserts covering much of Pangaea - the supercontinent that contained all of
+                        Earth's landmass.</p>
+                    <p>Seasonal monsoons occurred in the tropics, and there were no polar ice caps. The first dinosaurs
+                        appeared during this period, along with the first mammals.</p>
+                    <p>Vegetation was dominated by ferns, cycads, and conifers. Flowering plants had not yet evolved.
+                        The supercontinent Pangaea began to show the first signs of breaking apart, with rift valleys
+                        forming that would eventually become the Atlantic Ocean.</p>
+                    <p>Marine life included the first ichthyosaurs and nothosaurs, while on land, early archosaurs and
+                        therapsids dominated before the rise of true dinosaurs.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jurassic Period Section -->
+        <div class="era-section">
+            <h2 class="era-title">Jurassic Period (201-145 million years ago)</h2>
+            <div class="era-content">
+                <div class="era-description">
+                    <p>During the Jurassic, Pangaea began to break apart into Laurasia (north) and Gondwana (south). The
+                        climate became more humid and tropical worldwide, with higher oxygen levels supporting the
+                        growth of giant insects and massive dinosaurs.</p>
+                    <p>Lush forests covered the land, with ferns, cycads, and conifers creating dense vegetation that
+                        supported enormous herbivorous dinosaurs. The first birds appeared, evolving from small theropod
+                        dinosaurs, marking one of the most significant evolutionary transitions.</p>
+                    <p>Sea levels rose significantly, creating extensive shallow seas that covered parts of the
+                        continents. These warm, nutrient-rich waters teemed with marine reptiles like plesiosaurs and
+                        ichthyosaurs, while ammonites diversified into numerous species.</p>
+                    <p>This period saw the dominance of giant sauropods like Brachiosaurus and Diplodocus, which evolved
+                        long necks to reach high vegetation. Stegosaurs developed their distinctive plates and spikes
+                        for defense and thermoregulation.</p>
+                    <p>The breakup of continents created isolated environments that accelerated evolutionary
+                        diversification. Volcanic activity was widespread, contributing to the rich mineral deposits
+                        that would later become valuable resources.</p>
+                    <p>Coastal areas featured extensive coral reefs, and the first lizards and modern-type mammals
+                        appeared, though they remained small and nocturnal to avoid predation by dinosaurs.</p>
+                </div>
+                <div>
+                    <img src="https://m.media-amazon.com/images/I/71lEPQgghlL._AC_UF894,1000_QL80_.jpg"
+                        alt="Jurassic Landscape" class="era-image">
+                </div>
+            </div>
+        </div>
+
+        <!-- Cretaceous Period Section -->
+        <div class="era-section">
+            <h2 class="era-title">Cretaceous Period (145-66 million years ago)</h2>
+            <div class="era-content">
+                <div>
+                    <img src="https://i.ibb.co/ksqtr6fS/BIBE-cretaceous-mural.jpg" alt="Cretaceous Landscape"
+                        class="era-image">
+                </div>
+                <div class="era-description">
+                    <p>The Cretaceous saw the continents moving toward their modern positions. The climate was warmer
+                        than today, with high sea levels creating extensive shallow inland seas like the Western
+                        Interior Seaway that divided North America.</p>
+                    <p>Flowering plants (angiosperms) appeared and diversified rapidly, revolutionizing terrestrial
+                        ecosystems. This period featured the most famous dinosaurs like T-Rex, Triceratops, and
+                        Velociraptor, which developed increasingly sophisticated hunting and defense strategies.</p>
+                    <p>The period ended with the Cretaceous-Paleogene extinction event, likely caused by an asteroid
+                        impact combined with massive volcanic activity, which wiped out all non-avian dinosaurs and
+                        about 75% of all species on Earth.</p>
+                    <p>Marine ecosystems flourished with mosasaurs becoming the dominant predators, while pterosaurs
+                        reached their largest sizes with wingspans exceeding 10 meters. Social behavior in dinosaurs
+                        became more complex, with evidence of herding, nesting colonies, and parental care.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environment Features Grid -->
+        <div class="environment-grid">
+            <div class="environment-card">
+                <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                    alt="Ancient Forests">
+                <h3>Lush Forests</h3>
+                <p>Dense forests of conifers, ferns, and cycads covered much of the land, providing habitat and food for
+                    herbivorous dinosaurs. These forests created complex ecosystems with multiple canopy layers.</p>
+            </div>
+
+            <div class="environment-card">
+                <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                    alt="Ancient Oceans">
+                <h3>Warm Seas</h3>
+                <p>Shallow inland seas teemed with marine reptiles, ammonites, and early fish species during the
+                    Mesozoic era. These warm waters supported diverse coral reefs and plankton blooms.</p>
+            </div>
+
+            <div class="environment-card">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                    alt="Mountain Formation">
+                <h3>Active Geology</h3>
+                <p>Continental drift and mountain building created diverse landscapes and isolated ecosystems for
+                    evolution. Volcanic activity enriched soils and shaped the atmosphere.</p>
+            </div>
+        </div>
+
+        <!-- Continental Drift Section -->
+        <div class="continent-map">
+            <h2>Continental Drift During Mesozoic</h2>
+            <img src="https://i.ibb.co/Pz5cfBWb/Distribution-landmasses-regions-seas-ocean-basins-locations.jpg"
+                alt="Pangaea Map">
+            <p class="map-caption">The breakup of Pangaea during the Mesozoic Era dramatically changed Earth's geography
+                and climate, creating new ocean currents and weather patterns that influenced evolution</p>
+        </div>
+
+        <!-- Video Section -->
+        <div class="video-section" id="videoSection">
+            <h2 class="video-title">Mesozoic World Documentary</h2>
+            <div class="video-container">
+                <video id="mesozoicVideo" class="custom-video" controls>
+                    <source src="https://files.catbox.moe/7rcqhu.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-controls">
+                <button class="video-btn" onclick="playVideo()">Play</button>
+                <button class="video-btn" onclick="pauseVideo()">Pause</button>
+                <button class="video-btn" onclick="toggleMute()">Mute/Unmute</button>
+                <button class="video-btn" onclick="restartVideo()">Restart</button>
+            </div>
+            <p style="margin-top: 15px; font-style: italic;">
+                Watch this documentary to learn more about the Mesozoic environment and the world dinosaurs inhabited
+            </p>
+        </div>
+
+        <footer>
+            <p>CS 230 - Emerging Technologies: Project #3 | Mesozoic Environment</p>
+        </footer>
+    </div>
+
+    <script>
+        // Video control functions
+        const video = document.getElementById('mesozoicVideo');
+        
+        function playVideo() {
+            video.play();
+        }
+        
+        function pauseVideo() {
+            video.pause();
+        }
+        
+        function toggleMute() {
+            video.muted = !video.muted;
+        }
+        
+        function restartVideo() {
+            video.currentTime = 0;
+            video.play();
+        }
+        
+        // Auto-play video when it comes into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Optional: Uncomment the line below if you want the video to play automatically when scrolled into view
+                    // video.play();
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(video);
+
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add hover effects to era sections
+            const eraSections = document.querySelectorAll('.era-section');
+            eraSections.forEach(section => {
+                section.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+
+                section.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

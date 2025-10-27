@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinosaur Era Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .dinosaur-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            margin: 50px 0;
+        }
+        
+        .dino-item {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s, box-shadow 0.4s;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .dino-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .dino-item:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .dino-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .dino-image {
+            flex: 1;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .dino-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .dino-item:hover .dino-image img {
+            transform: scale(1.1);
+        }
+        
+        .dino-info {
+            flex: 1;
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .dino-name {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .dino-era {
+            font-size: 1.1rem;
+            color: #ff9999;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .dino-description {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+        
+        .learn-more {
+            display: inline-block;
+            padding: 10px 25px;
+            background: linear-gradient(to right, #ff8a00, #e52e71);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .learn-more:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .audio-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: none;
+            z-index: 10;
+        }
+        
+        .dino-item:hover .audio-indicator {
+            display: block;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        @keyframes shake {
+            0% { transform: translateX(0) translateY(-10px); }
+            25% { transform: translateX(-5px) translateY(-10px); }
+            50% { transform: translateX(5px) translateY(-10px); }
+            75% { transform: translateX(-5px) translateY(-10px); }
+            100% { transform: translateX(0) translateY(-10px); }
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .nav-btn {
+            padding: 15px 30px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 900px) {
+            .dino-item, .dino-item:nth-child(odd), .dino-item:nth-child(even) {
+                flex-direction: column;
+            }
+            
+            .dino-image {
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dinosaur Era Explorer</h1>
+            <p class="subtitle">Explore the magnificent creatures that roamed the Earth millions of years ago. Hover over each dinosaur to hear its roar and see it come to life!</p>
+        </header>
+        
+        <div class="dinosaur-grid">
+            <!-- Tyrannosaurus Rex -->
+            <div class="dino-item" data-audio="tRexRoar">
+                <div class="dino-image">
+                    <img src="https://i.ibb.co/cKDy2KKb/tyrannosaurus-rex-wild.jpg" alt="Tyrannosaurus Rex">
+                    <div class="audio-indicator">ROAR!</div>
+                </div>
+                <div class="dino-info">
+                    <h2 class="dino-name">Tyrannosaurus Rex</h2>
+                    <p class="dino-era">Late Cretaceous Period (68-66 million years ago)</p>
+                    <p class="dino-description">The Tyrannosaurus Rex, often called T-Rex, is one of the most well-represented large theropods. It was a bipedal carnivore with a massive skull balanced by a long, heavy tail.</p>
+                    <a href="https://en.wikipedia.org/wiki/Tyrannosaurus" class="learn-more" target="_blank">Learn More</a>
+                </div>
+                <audio id="tRexRoar" preload="auto">
+                    <source src="https://files.catbox.moe/jy8xn1.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <!-- Triceratops -->
+            <div class="dino-item" data-audio="triceratopsRoar">
+                <div class="dino-image">
+                    <img src="https://i.ibb.co/vMr9TCF/view-extinct-triceratops-dinosaur-creature.jpg" alt="Triceratops">
+                    <div class="audio-indicator">ROAR!</div>
+                </div>
+                <div class="dino-info">
+                    <h2 class="dino-name">Triceratops</h2>
+                    <p class="dino-era">Late Cretaceous Period (68-66 million years ago)</p>
+                    <p class="dino-description">Triceratops is one of the most recognizable dinosaurs with its large bony frill and three horns on its face. It was a herbivore that could grow up to 9 meters in length.</p>
+                    <a href="https://en.wikipedia.org/wiki/Triceratops" class="learn-more" target="_blank">Learn More</a>
+                </div>
+                <audio id="triceratopsRoar" preload="auto">
+                    <source src="https://files.catbox.moe/b7v0sd.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <!-- Stegosaurus -->
+            <div class="dino-item" data-audio="stegosaurusRoar">
+                <div class="dino-image">
+                    <img src="https://i.ibb.co/fdPdwZsd/Pngtree-stegosaurus-dinosaur-on-smoke-background-15471456.jpg" alt="Stegosaurus">
+                    <div class="audio-indicator">ROAR!</div>
+                </div>
+                <div class="dino-info">
+                    <h2 class="dino-name">Stegosaurus</h2>
+                    <p class="dino-era">Late Jurassic Period (155-150 million years ago)</p>
+                    <p class="dino-description">Stegosaurus is known for the distinctive kite-shaped plates on its back and the spikes on its tail. This herbivorous dinosaur could reach up to 9 meters in length.</p>
+                    <a href="https://en.wikipedia.org/wiki/Stegosaurus" class="learn-more" target="_blank">Learn More</a>
+                </div>
+                <audio id="stegosaurusRoar" preload="auto">
+                    <source src="https://files.catbox.moe/rzmjqr.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <!-- Velociraptor -->
+            <div class="dino-item" data-audio="velociraptorRoar">
+                <div class="dino-image">
+                    <img src="https://i.ibb.co/qMVNwVYS/velociraptor-naturalhabitat-agileprowling-882186-37406.jpg" alt="Velociraptor">
+                    <div class="audio-indicator">ROAR!</div>
+                </div>
+                <div class="dino-info">
+                    <h2 class="dino-name">Velociraptor</h2>
+                    <p class="dino-era">Late Cretaceous Period (75-71 million years ago)</p>
+                    <p class="dino-description">Contrary to popular depictions, Velociraptors were much smaller than shown in movies, about the size of a turkey. They were feathered predators with a large sickle-shaped claw on each hindfoot.</p>
+                    <a href="https://en.wikipedia.org/wiki/Velociraptor" class="learn-more" target="_blank">Learn More</a>
+                </div>
+                <audio id="velociraptorRoar" preload="auto">
+                    <source src="https://files.catbox.moe/qnxnfh.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <!-- Brachiosaurus -->
+            <div class="dino-item" data-audio="brachiosaurusRoar">
+                <div class="dino-image">
+                    <img src="https://i.ibb.co/93BhVFLs/sauropod-dinosaur-nature-23-2151535154.jpg" alt="Brachiosaurus">
+                    <div class="audio-indicator">ROAR!</div>
+                </div>
+                <div class="dino-info">
+                    <h2 class="dino-name">Brachiosaurus</h2>
+                    <p class="dino-era">Late Jurassic Period (154-153 million years ago)</p>
+                    <p class="dino-description">Brachiosaurus was one of the tallest and largest dinosaurs, with its front legs longer than its hind legs, giving it a giraffe-like stance. This massive herbivore could reach up to 26 meters in length.</p>
+                    <a href="https://en.wikipedia.org/wiki/Brachiosaurus" class="learn-more" target="_blank">Learn More</a>
+                </div>
+                <audio id="brachiosaurusRoar" preload="auto">
+                    <source src="https://files.catbox.moe/gnxfmb.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="environment.html" class="nav-btn">Explore the Mesozoic Environment</a>
+            <a href="discover_dinosaur_era_fauna.html" class="nav-btn">Discover Dinosaur Era Fauna</a>
+        </div>
+        
+        <footer>
+            <p>CS 230 - Emerging Technologies: Project #3 | Dinosaur Multimedia Web Page</p>
+        </footer>
+    </div>
+
+    <script>
+        // Track currently playing audio
+        let currentAudio = null;
+        
+        // Function to stop all audio
+        function stopAllAudio() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+        }
+        
+        // Function to play specific audio
+        function playAudio(audioId) {
+            stopAllAudio(); // Stop any currently playing audio
+            const audio = document.getElementById(audioId);
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(e => {
+                    console.log("Audio play failed:", e);
+                });
+                currentAudio = audio;
+            }
+        }
+        
+        // Set up hover event listeners for all dinosaur items
+        document.addEventListener('DOMContentLoaded', function() {
+            const dinoItems = document.querySelectorAll('.dino-item');
+            
+            dinoItems.forEach(item => {
+                // Mouse enter event
+                item.addEventListener('mouseenter', function() {
+                    const audioId = this.getAttribute('data-audio');
+                    playAudio(audioId);
+                });
+                
+                // Mouse leave event - stop audio when leaving
+                item.addEventListener('mouseleave', function() {
+                    // We don't stop audio immediately on mouse leave
+                    // to allow the sound to finish playing naturally
+                });
+            });
+            
+            // Preload all audio files when page loads
+            const audioElements = document.querySelectorAll('audio');
+            audioElements.forEach(audio => {
+                audio.load();
+                audio.volume = 0.7; // Set volume to 70%
+            });
+            
+            // Enable audio on first user interaction (click anywhere)
+            document.addEventListener('click', function() {
+                // This helps with browsers that require user interaction for audio
+                console.log("Audio enabled - you can now hover over dinosaurs to hear them roar!");
+            });
+        });
+    </script>
+</body>
+</html>
